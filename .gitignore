@@ -1,0 +1,14 @@
+.idea/
+blacklist.txt
+blacklist.txt
+comments.txt
+cosmicpython.checkpoint
+followed.txt
+friends.txt
+instabot.log
+install/
+
+skipped.txt
+unfollowed.txt
+venv/
+whitelist.txt
