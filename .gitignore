@@ -7,8 +7,9 @@ followed.txt
 friends.txt
 instabot.log
 install/
-
+cache/
 skipped.txt
 unfollowed.txt
 venv/
 whitelist.txt
+.env
