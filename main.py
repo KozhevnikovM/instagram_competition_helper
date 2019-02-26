@@ -7,6 +7,7 @@ import argparse
 
 def run_with_cache(func):
     def wrapper(*args, **kwargs):
+        os.makedirs('cache', exist_ok=True)
         filename = func.__name__ + '_cache.json'
         filepath = os.path.join('cache', filename)
         if not os.path.exists(filepath):
@@ -71,8 +72,7 @@ if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('url', type=str,
-                            help='Your instagram post url',
-                            default='https://www.instagram.com/p/BtON034lPhu/'
+                            help='Your instagram post url'
                             )
     args = arg_parser.parse_args()
     if args.url:
@@ -84,10 +84,9 @@ if __name__ == '__main__':
     comments = fetch_comments(post_url)
     commenters = get_suited_commenters(comments)
     likers = map(int, get_likers(post_url))
-    followers = map(int, get_followers('beautybar.rus'))
-    # followers = map(int, get_followers(LOGIN))
-    competition = []
+    followers = map(int, get_followers(LOGIN))
+    competitors = []
     for commenter in commenters:
         if commenter[0] in (set(likers) & set(followers)):
-            competition.append(tuple(commenter))
-    pprint(competition)
+            competitors.append(tuple(commenter))
+    pprint(competitors)
