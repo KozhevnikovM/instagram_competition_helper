@@ -12,8 +12,11 @@ $ pip install -r requirements.txt
 ```
 
 ## How to use:
+Rename dotenv_sample file to .env
 
-python main.py your_url_here
+Replace values in .env with your credentials
+
+And run: python main.py your_url_here
 
 ```bash
 $ python main.py https://www.instagram.com/p/BtON034lPhu/
@@ -26,6 +29,6 @@ $ python main.py https://www.instagram.com/p/BtON034lPhu/
 ```
 
 ## Warning:
-Checking than user exist make take a long time.
-And I decided use files for caching responses.
+Checking that mentioned user is exist take a long time.
+I decided use files for caching responses.
 If you do not want to use old cached info, you need to clear folder named 'cache' 
