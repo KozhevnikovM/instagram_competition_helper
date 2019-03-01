@@ -6,6 +6,7 @@ import argparse
 
 
 def run_with_cache(func):
+    '''May be I invited wheel, but it's my personal invention :-)'''
     def wrapper(*args, **kwargs):
         os.makedirs('cache', exist_ok=True)
         filename = func.__name__ + '_cache.json'
@@ -27,15 +28,11 @@ def fetch_comments(url):
 
 
 def get_mentioned_users(comment):
+    '''JONATHAN STASSEN, Thank you for patter.
+    https://blog.jstassen.com/2016/03/code-regex-for-instagram-username-and-hashtags/
+    '''
     pattern = r'(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)'
     yield from re.finditer(pattern, comment['text'])
-
-
-def is_user_exist(user):
-    if bot.get_user_id_from_username(user):
-        return True
-    else:
-        return False
 
 
 @run_with_cache
@@ -43,9 +40,7 @@ def get_suited_commenters(comments):
     users = []
     for comment in comments:
         mentioned_users = get_mentioned_users(comment)
-        for user in mentioned_users:
-            if is_user_exist(user.group(0)[1:]):
-                users.append((comment['user_id'], comment["user"]["username"]))
+        users.append([user for user in mentioned_users if bot.get_user_id_from_username(user)])
     return users
 
 
@@ -53,9 +48,7 @@ def get_suited_commenters(comments):
 def get_likers(url):
     media_id = bot.get_media_id_from_link(url)
     liker_ids = bot.get_media_likers(media_id)
-    likers = []
-    for id in liker_ids:
-        likers.append(id)
+    likers = [id for id in liker_ids]
     return likers
 
 
@@ -71,12 +64,14 @@ if __name__ == '__main__':
     PASSWORD = os.getenv('INSTA_PASSWORD')
 
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('url', type=str,
+    arg_parser.add_argument('url', type=str, nargs='?',
                             help='Your instagram post url'
                             )
     args = arg_parser.parse_args()
-    if args.url:
-        post_url = args.url
+    if not args.url:
+        exit('Post url is required: main.py put_your_link_here')
+
+    post_url = args.url
 
     bot = Bot()
     bot.login(username=LOGIN, password=PASSWORD)
